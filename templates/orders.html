@@ -1,0 +1,41 @@
+{% extends 'index.html' %}
+{% block content %}
+{% load cart %}
+<div class="container">
+    <div class="border rounded p-4 m-4">
+        <p class="display-4">Your Orders</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Sr.no</th>
+                    <th>Product</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ord in order%}
+                <tr>
+                    <td scope="row">{{forloop.counter}}</td>
+                    <td><img src="{{ord.product.image.url}}" style="height: 80px;"></td>
+                    <td>{{ord.product.name}}</td>
+                    <td>{{ord.price}}$</td>
+                    <td>{{ord.quantity}}</td>
+                    <td>{{ord.quantity|multilpy:ord.price}}</td>
+                    {% if ord.status %}
+                        <td><small class="badge badge-success">Completed</small></td>
+                    {% else %}
+                        <td><small class="badge badge-warning">Pending</small></td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{% endblock content %}

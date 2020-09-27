@@ -1,0 +1,33 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="container">
+    <div class="p-4 m-4">
+        <div class="col-lg-5 mx-auto border rounded pt-3">
+            <h3 class="alert alert-light">Create An Account</h3>
+            <form action="" method="post">
+                {% csrf_token %}
+                {% if error %}
+                <div class="alert alert-success" role="alert">
+                  {{error}}
+                </div>
+                {% endif %}
+                <div class="form-group">
+                    <label for="">First Name</label>
+                    <input required type="text" name="firstname" value="{{value.firstname}}" class="form-control" placeholder="" aria-describedby="helpId">
+                    <label for="">Last Name</label>
+                    <input required type="text" name="lastname" value="{{value.lastname}}" class="form-control" placeholder="" aria-describedby="helpId">
+                    <label for="">Email</label>
+                    <input required type="email" name="email" value="{{value.email}}" class="form-control" placeholder="" aria-describedby="helpId">
+                    <label for="">Phone No.</label>
+                    <input required type="number" name="phoneno" value="{{value.phoneno}}" class="form-control" placeholder="" aria-describedby="helpId">
+                    <label for="">Password</label>
+                    <input required type="password" name="password" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                    <label for="">Confirm Password</label>
+                    <input required type="password" name="repassword" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                    <input type="submit" value="Create An Account" class="btn btn-sm btn-info">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
