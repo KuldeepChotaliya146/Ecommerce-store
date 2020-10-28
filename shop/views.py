@@ -1,11 +1,11 @@
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect, redirect
 from django.contrib.auth.hashers import check_password, make_password
 from .models import *
-#from shop.middlewares.auth import simple_middleware
-#from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from .Paytm import Checksum
 # Create your views here.
 
-
+merchant_key = 'XiXbHrjTeTKkpEv3'
 def product(request):
     if request.method == "GET":
         cart = request.session.get('cart')
@@ -119,6 +119,7 @@ def checkoutuser(request):
         address = request.POST.get('address')
         phone = request.POST.get('phone')
         customer = request.session.get('customer')
+        amount = request.POST.get('amount')
         cart = request.session.get('cart')
         # print(cart)
         products = Product.addcart(list(cart.keys()))
@@ -126,8 +127,26 @@ def checkoutuser(request):
             order = Order(Customer=Customer(id=customer), product=product, price=product.price,
                           address=address, phone=phone, quantity=cart.get(str(product.id)))
             order.save()
-            request.session['cart'] = {}
+        param_dict={
+
+            'MID': 'SWLdgW39069691289143',
+            'ORDER_ID': str(order.id),
+            'TXN_AMOUNT': amount,
+            'CUST_ID': str(phone),
+            'INDUSTRY_TYPE_ID': 'Retail',
+            'WEBSITE': 'WEBSTAGING',
+            'CHANNEL_ID': 'WEB',
+            'CALLBACK_URL':'http://127.0.0.1:8000/handlerequest/',
+        }
+        param_dict['CHECKSUMHASH'] = Checksum.generate_checksum(param_dict,merchant_key)
+        return render(request,'paytm.html',{'param_dict':param_dict})
+
     return redirect('cart')
+
+@csrf_exempt
+def handlerequest(request):
+    return HttpResponse("Done")
+
 
 
 def yourorder(request):
