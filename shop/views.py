@@ -156,5 +156,4 @@ def yourorder(request):
         return render(request, 'orders.html', {'order': order})
 
 
-# superuser:ck
-# pass:admin321
+
